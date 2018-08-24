@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>API</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<style>
+    div{
+        width:100%;
+        height:100%;
+    }
+
+    h2{
+        display:block;
+        position:relative;
+        margin-left:30px;
+    }
+    h3{
+        display:block;
+        position:relative;
+        margin-left:60px;
+    }
+    h4{
+        display:block;
+        position:relative;
+        margin-left:90px;
+    }
+    h5{
+        display:block;
+        position:relative;
+        margin-left:120px;
+    }
+</style>
+<script>
+
+function display(res){
+/*
+        self.hash = None # 사용할 UTXO가 포함된 해시
+        self.n = 0 # 위 트랙잰션 중에서 몇 번째 UTXO인지
+        self.address = '' # UTXO의 수신주소
+        self.value = '' # UTXO의 잔액
+        self.sign = '' # 서명
+        self.pubk = '' # 사용자의 공개키
+
+        self.to = '' # 받는 주소
+        self.value = '' # 금액
+*/
+    var content = "";
+
+
+    res.forEach(function(v,i){
+        content += "<h1>"+"block : "+v.hash+"</h1>";
+        v.transactions.forEach(function(v0,i0){
+            content += "<h2>"+"transaction :"+v0.hash+"</h2>";
+
+            v0.inputs.forEach(function(v1,i1){
+                content += "<h3>"+"input "+i1+"</h3>";
+                for (var k in v1){
+                    content += "<h4>"+k+" : "+v1[k]+"</h4>";
+                }
+            });
+
+            v0.outputs.forEach(function(v1,i1){
+                content += "<h3>"+"output "+i1+" : "+v1.to+"</h3>";
+                for (var k in v1){
+                    content += "<h4>"+k+" : "+v1[k]+"</h4>";
+                }
+            });
+
+        });
+
+    });
+
+    $('div').html(content);
+
+
+}
+
+
+
+$(document).ready(function() {
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost/hello',
+                    success: function(data){
+                        //var res = data.slice(0,data.length);
+                        data = data.replace(/\'/g,'"');
+                        data = data.replace(/None/g,'\"None\"');
+                        json0 = JSON.parse(data);
+                        display(json0.a)
+                    },
+                    error: function(err){
+                        console.log(err)
+                    },
+                    dataType: 'json'
+                });
+});
+</script>
+<body>
+<div></div>
+</body>
+</html>

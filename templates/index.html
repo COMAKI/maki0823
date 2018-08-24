@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Hello Wrold</h1>
+<form action="/tx" method="post">
+    from<input type="text" name="from">
+    value<input type="text" name="value">
+    to<input type="text" name="to">
+    <input type="submit" value="submit">
+</form>
+{% for v in result.items() %}
+    {{v}}
+{% endfor %}
+</body>
+</html>

@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, jsonify, url_for, redirect
-import json;
+from blockchain import *
+import json
 
 def UTXOdummy(to, value):
     jsonV = { "prev": "000x",
@@ -12,12 +13,13 @@ def UTXOdummy(to, value):
 app = Flask(__name__)
 
 @app.route('/')
-def index():
+def index(arg = {}):
     print('call Index')
-    dum1 = json.loads(UTXOdummy('bob', 100));
-    dum2 = json.loads(UTXOdummy('alice', 50));
-
-    return render_template('overview.html', utxo=[dum1, dum2])
+    utxos = {}
+    for name in names:
+        utxos[name] = getUnspentUTXOs(name)
+    print(utxos)
+    return render_template('overview.html', result=utxos , arg = arg)
 
 @app.route('/transfer')
 def transfer():
@@ -27,4 +29,154 @@ def transfer():
     print('거래:', toWhom, money)
     return redirect(url_for('index'))
 
-app.run(host='127.0.0.1', port=88)
+@app.route('/api')
+def api():
+    return render_template('api.html')
+
+@app.route('/hello')
+def hello():
+    output_json = "{'a':"+str(altCoin)+"}"
+    print(output_json)
+    return jsonify(output_json)
+
+@app.route('/shutdown')
+def shutdown():
+    shutdown_server()
+    return 'Server shutting down...'
+
+
+def getUnspentUTXOs(name):
+    list = []
+    chain = altCoin.chain  # Blockchain['getChaina
+    priv = sha256(name)
+    pubk = privtopub(priv)
+    addr = pubtoaddr(pubk)
+
+    for block in chain:
+        for tx in block.transactions:
+            for elm in tx.inputs:
+                list = [x for x in list if not (x['txhash'] == elm.hash and x['n'] == elm.n)]
+            for idx, elm in enumerate(tx.outputs):
+                if elm.to == addr:
+                    dict0 = {}
+                    dict0['to'] = elm.to
+                    dict0['txhash'] = tx.hash
+                    dict0['n'] = idx
+                    dict0['value'] = elm.value
+                    list.append(dict0)
+
+    return list
+
+
+@app.route('/getutxos')
+def get(arg={}):
+    a = {}
+    for name in names:
+        a[name] = getUnspentUTXOs(name)
+    return index(arg)
+
+@app.route('/login')
+def login():
+
+    return
+
+'''
+result = {
+    'alice': [
+        {
+            txhash = egaw2332tg3ga3t3
+            n = 2
+            value = 100
+        },
+        {
+
+        },
+    ],
+    'bob' : [
+
+    ]
+}
+'''
+
+
+@app.route('/tx')
+def tx():
+    from_ = request.args.get('from')
+    val = int(request.args.get('value'))
+    to = request.args.get('to')
+
+    list = getUnspentUTXOs(from_)
+    result = {'tx':'fail','txout':'None'}
+
+
+    todeletes = []
+
+    for a in list:
+        for b in altCoin.get_curr_block().transactions:
+            for c in b.inputs:
+                if c.hash==a['txhash'] and c.n==a['n']:
+                    todeletes.append(a)
+
+    for a in todeletes:
+        list.remove(a)
+
+
+    print("length of a : " +str(len(list)))
+
+    sum = 0
+    for idx, elm in enumerate(list):
+        sum += elm['value']
+        if sum >= val:
+            list = list[:idx + 1]
+            break;
+
+    tx = Transaction()
+
+    for elm in list:
+        txin = TxIn()
+        txin.address = elm['to']
+        txin.value = elm['value']
+        txin.n = elm['n']
+        txin.hash = elm['txhash']
+
+        tx.add_input(txin)
+
+    txout = TxOut()
+    txout.to = gen_address(to)[0]
+    txout.value = val
+    tx.add_output(txout)
+
+
+
+    if sum > val:
+        txout = TxOut()
+        txout.to = gen_address(from_)[0]
+        txout.value = sum - val
+        tx.add_output(txout)
+        result['tx'] = 'success'
+        # result['txout'] = json.dumps(altCoin.get_curr_block().transactions)
+
+    tx.gen_hash()
+    # tx.sign(gen_address(from_)[1])
+    altCoin.get_curr_block().add_transaction(tx)
+    return get(result)
+
+ismining = False
+@app.route('/mine')
+def is_mining():
+    global ismining
+    if ismining:
+        return index()
+    else:
+        ismining = True
+        altCoin.add_block()
+        ismining = False
+        return index()
+
+url = 'localhost'
+# Windows
+chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
+
+
+chrome = ChromeBrowser(chrome_path, url)
+app.run(host=url, port=80)

@@ -8,6 +8,30 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+  <script>
+  $(document).ready(function() {
+        var arg = {{arg|tojson|safe}}
+        console.log(arg);
+        var data = {{ result|tojson|safe }}
+        console.log(data);
+        let sum = 0;
+        for (var i in data['alice']){
+            sum += data['alice'][i].value;
+        };
+        $('#amount').html(sum);
+
+        if( arg['tx'] && arg['tx'] == 'fail'){
+            $('#txmsg').html('transaction failed');
+        }
+        else{
+            if( arg['txout'] ){
+                arg['txout']
+                $('#txpool').html('<li class="list-group-item list-group-item-success">ddd</li>')
+            }
+        }
+
+    });
+  </script>
 </head>
 <style>
    ul.list-group.list-group-striped li:nth-of-type(odd){
@@ -15,18 +39,27 @@
 }
 ul.list-group.list-group-striped li:nth-of-type(even){
 }
+.mine{
+  font-size: 2em;
+  margin: 5px;
+  background: #9A6D38;
+  color: #D8FFDD;
+}
 </style>
 <body>
 
 <div class="container">
 <h1 class="text-center">Bank</h1>
+  <div class="fixed-top"><a href="/mine"><span class="mine">Mine</span></a></div>
 <div class="row">
   <div class="col col-lg-8 col-md-6 col-sm-12">
      <h2>Transaction : UTXO</h2>
     <ul class="list-group">
-      {% for item in utxo: %}
-      {% if item.get('owner') == 'alice':%} <li class="list-group-item list-group-item-success">{{item}}</li>
-      {% else %} <li class="list-group-item list-group-item-danger">{{item}}</li>
+      {% for k , v in result.items() : %}
+      {% if k == 'alice':%}
+      {% for v0 in v : %}
+      <li class="list-group-item list-group-item-success">{{v0}}</li>
+      {% endfor %}
       {% endif%}
       {% endfor %}
       <!--<li class="list-group-item list-group-item-secondary">Secondary item</li>-->
@@ -42,22 +75,24 @@ ul.list-group.list-group-striped li:nth-of-type(even){
 <h1 class="text-center" id="user">Alice</h1>
      <h2>Wallet</h2>
     <ul class="list-group list-group-striped">
-  <li class="list-group-item">asdf</li>
-  <li class="list-group-item">asdf</li>
-  <li class="list-group-item">asdf</li>
-  <li class="list-group-item">asdf</li>
+          <li class="list-group-item"><span>잔액:</span><span id="amount"></spani></li>
     </ul>
-    <form action="/transfer" method="get">
+    <form action="/tx" method="GET">
     <p>
       <h2>Trasfer</h2>
       <div class="form-group">
 
-        <input type="inpupt" class="form-control" id="receiver" placeholder="받을 사람" name="receiver">
+        <input type="inpupt" class="form-control" id="to" placeholder="받을 사람" name="to">
       </div>
       <div class="form-group">
         <input type="number" class="form-control" id="value" placeholder="금액" name="value">
       </div>
+          <input type="hidden" name="from" value="alice">
       <button type="submit" class="btn-block btn btn-primary">remit</button>
+      <h3 id="txmsg" style="color:red;"></h3>
+    <ul class="list-group" id="txpool">
+    </ul>
+
     </form>
   </div>
 </div>
