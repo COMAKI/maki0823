@@ -154,11 +154,11 @@ def tx():
         txout.value = sum - val
         tx.add_output(txout)
         result['tx'] = 'success'
-        # result['txout'] = json.dumps(altCoin.get_curr_block().transactions)
 
     tx.gen_hash()
     # tx.sign(gen_address(from_)[1])
     altCoin.get_curr_block().add_transaction(tx)
+    result['txout'] = json.dumps(str(altCoin.get_curr_block().transactions))
     return get(result)
 
 ismining = False
