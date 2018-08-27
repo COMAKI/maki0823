@@ -15,10 +15,14 @@
         var data = {{ result|tojson|safe }}
         console.log(data);
         let sum = 0;
-        for (var i in data['alice']){
-            sum += data['alice'][i].value;
-        };
-        $('#amount').html(sum);
+        for (var idx in range(0,4){
+            for (var i in data[0]){
+                sum += data[0][i].value;
+            };
+            consol.log('#amount' + idx);
+            $('#amount' + idx).html(sum);
+        }
+
 
         if( arg['tx'] && arg['tx'] == 'fail'){
             $('#txmsg').html('transaction failed');
@@ -31,10 +35,6 @@
         }
 
     });
-
-
-
-
 
     </script>
 </head>
@@ -51,34 +51,32 @@ ul.list-group.list-group-striped li:nth-of-type(even){
   color: #D8FFDD;
 }
 
-
-
-
-
 </style>
 <body>
 
 <div class="container">
+    <h1 class="text-center">Bank</h1>
+    <div class="fixed-top"><a href="/mine"><span class="mine">Mine</span></a></div>
+	<div class ="row">
+		<div class="col">
     <div class="row">
-        <div class="col col-md-6 col-sm-12">
-            <h1 class="text-center">Bank</h1>
-            <div class="fixed-top"><a href="/mine"><span class="mine">Mine</span></a></div>
+        <div class="col col-lg-8 col-md-6 col-sm-12">
             <h2>Transaction : UTXO</h2>
-            <ul class="list-group">
+            <ul class="list-group list-inline ">
                 {% for k , v in result.items() : %}
                 {% if k == 'alice':%}
                 {% for v0 in v : %}
-                <span>
-                    <li class="list-group-item list-group-item-success">{{v0}}</li>
-                </span>
+                <li class="list-group-item list-group-item-success">{{v0}}</li>
                 {% endfor %}
                 {% endif%}
                 {% endfor %}
             </ul>
-            <h1 class="text-center" id="user">Alice</h1>
+        </div>
+        <div class="col col-lg-4 col-md-6 col-12">
+            <h1 class="text-center" id="user1">Alice</h1>
             <h2>Wallet</h2>
-            <ul class="list-group list-group-striped ">
-                <li class="list-group-item"><span>잔액:</span><span id="amount"></span></li>
+            <ul class="list-group list-group-striped">
+                <li class="list-group-item"><span>잔액:</span><span id="amount1"></span></li>
             </ul>
             <form action="/tx" method="GET">
                 <p>
@@ -99,6 +97,51 @@ ul.list-group.list-group-striped li:nth-of-type(even){
             </form>
         </div>
     </div>
+	</div>
+
+    <div class="col">
+        <div class="row">
+            <div class="col col-lg-8 col-md-6 col-sm-12">
+                <h2>Transaction : UTXO</h2>
+                <ul class="list-group list-inline">
+                    {% for k , v in result.items() : %}
+                    {% if k == 'bob':%}
+                    {% for v0 in v : %}
+                    <li class="list-group-item list-group-item-success">{{v0}}</li>
+                    {% endfor %}
+                    {% endif%}
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col col-lg-4 col-md-6 col-12">
+                <h1 class="text-center" id="user2">Bob</h1>
+                <h2>Wallet</h2>
+                <ul class="list-group list-group-striped">
+                    <li class="list-group-item"><span>잔액:</span><span id="amount2"></span></li>
+                </ul>
+                <form action="/tx" method="GET">
+                    <p>
+                    <h2>Trasfer</h2>
+                    <div class="form-group">
+
+                        <input type="inpupt" class="form-control" name="to" placeholder="받을 사람">
+                    </div>
+                    <div class="form-group">
+                        <input type="number" class="form-control" name="value" placeholder="금액">
+                    </div>
+                    <input type="hidden" name="from" value="alice">
+                    <button type="submit" class="btn-block btn btn-primary">remit</button>
+                    <h3 id="txmsg2" style="color:red;"></h3>
+                    <ul class="list-group" id="txpool2">
+                    </ul>
+
+                </form>
+            </div>
+        </div>
+        </div>
+	</div>
+
+
 </div>
 
 </body>
