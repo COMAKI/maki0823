@@ -63,6 +63,7 @@ def getUTXOs(name):
                     dict0['txhash'] = tx.hash
                     dict0['n'] = idx
                     dict0['value'] = elm.value
+                    dict0['pubk'] = pubk
                     list.append(dict0)
 
     return list
@@ -138,6 +139,7 @@ def tx():
         txin.value = elm['value']
         txin.n = elm['n']
         txin.hash = elm['txhash']
+        txin.pubk = elm['pubk']
 
         tx.add_input(txin)
 
@@ -145,8 +147,6 @@ def tx():
     txout.to = gen_address(to)[0]
     txout.value = val
     tx.add_output(txout)
-
-
 
     if sum > val:
         txout = TxOut()
@@ -157,8 +157,8 @@ def tx():
     if sum == val:
         result['tx'] = 'success'
 
+    if not tx.is_valid(gen_address(from_)[1]): result['tx'] = 'fail'
     tx.gen_hash()
-    # tx.sign(gen_address(from_)[1])
     altCoin.get_curr_block().add_transaction(tx)
     result['txout'] = json.dumps(str(altCoin.get_curr_block().transactions))
     return get(result)
