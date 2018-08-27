@@ -17,7 +17,7 @@ def index(arg = {}):
     print('call Index')
     utxos = {}
     for name in names:
-        utxos[name] = getUnspentUTXOs(name)
+        utxos[name] = getUTXOs(name)
     print(utxos)
     return render_template('overview.html', result=utxos , arg = arg)
 
@@ -45,7 +45,7 @@ def shutdown():
     return 'Server shutting down...'
 
 
-def getUnspentUTXOs(name):
+def getUTXOs(name):
     list = []
     chain = altCoin.chain  # Blockchain['getChaina
     priv = sha256(name)
@@ -72,7 +72,7 @@ def getUnspentUTXOs(name):
 def get(arg={}):
     a = {}
     for name in names:
-        a[name] = getUnspentUTXOs(name)
+        a[name] = getUTXOs(name)
     return index(arg)
 
 @app.route('/login')
@@ -105,7 +105,7 @@ def tx():
     val = int(request.args.get('value'))
     to = request.args.get('to')
 
-    list = getUnspentUTXOs(from_)
+    list = getUTXOs(from_)
     result = {'tx':'fail','txout':'None'}
 
 
@@ -153,6 +153,8 @@ def tx():
         txout.to = gen_address(from_)[0]
         txout.value = sum - val
         tx.add_output(txout)
+        result['tx'] = 'success'
+    if sum == val:
         result['tx'] = 'success'
 
     tx.gen_hash()
