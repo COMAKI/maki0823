@@ -44,9 +44,7 @@ class Blockchain():
         tx = Transaction()
         txout = TxOut()
         ## change miner : alice -> random
-        tId = random.randint(0,len(names));
-        print("miner is ", names[tId]);
-        txout.to = gen_address(names[tId])[0]
+        txout.to = gen_address(names[random.randint(0,len(names) -1)])[0]
         txout.value = self.curr_reward
 
         tx.add_output(txout)
