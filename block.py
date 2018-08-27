@@ -18,6 +18,7 @@ class Block:
         self.transactions.append(transaction)
 
     def gen_mrkl_root(self):
+        pass
         # tx_prev, tx_next = ''
         # mrkl_nodes = copy.deepcopy(self.transactions)
         # while len(mrkl_nodes) > 1:
