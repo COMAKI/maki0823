@@ -43,7 +43,8 @@ class Blockchain():
         self.curr_block.prev_hash = self.get_latest_block().hash
         tx = Transaction()
         txout = TxOut()
-        txout.to = gen_address(names[0])[0]
+        ## change miner : alice -> random
+        txout.to = gen_address(names[random.randint(0,len(names) -1)])[0]
         txout.value = self.curr_reward
 
         tx.add_output(txout)

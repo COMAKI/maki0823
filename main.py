@@ -168,12 +168,13 @@ ismining = False
 def is_mining():
     global ismining
     if ismining:
-        return index()
+        return redirect('')
     else:
         ismining = True
         altCoin.add_block()
         ismining = False
-        return index()
+        ## recall 은 redirect로 호출 : @app.route('/')
+        return redirect('')
 
 url = 'localhost'
 # Windows
