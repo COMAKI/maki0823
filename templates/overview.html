@@ -15,11 +15,11 @@
         var data = {{ result|tojson|safe }}
         console.log(data);
         let sum = 0;
-        for (var idx in range(0,4){
+        for (var idx in data.length{
             for (var i in data[0]){
                 sum += data[0][i].value;
             };
-            consol.log('#amount' + idx);
+            console.log('#amount' + idx);
             $('#amount' + idx).html(sum);
         }
 
@@ -36,6 +36,9 @@
 
     });
 
+
+
+
     </script>
 </head>
 <style>
@@ -51,16 +54,22 @@ ul.list-group.list-group-striped li:nth-of-type(even){
   color: #D8FFDD;
 }
 
+
+
+
 </style>
 <body>
 
 <div class="container">
     <h1 class="text-center">Bank</h1>
-    <div class="fixed-top"><a href="/mine"><span class="mine">Mine</span></a></div>
-	<div class ="row">
-		<div class="col">
+    <div id="mine" class="fixed-top"><a href="/mine"><span class="mine">Mine</span></a></div>
+    <h3 id="txmsg" style="color:red;"></h3>
+    <ul class="list-group" id="txpool">
+    </ul>
     <div class="row">
-        <div class="col col-lg-8 col-md-6 col-sm-12">
+        <div class="col col-lg-6 col-md-6 col-sm-12">
+            <h1 class="text-center" id="user1">Alice</h1>
+
             <h2>Transaction : UTXO</h2>
             <ul class="list-group list-inline ">
                 {% for k , v in result.items() : %}
@@ -71,9 +80,6 @@ ul.list-group.list-group-striped li:nth-of-type(even){
                 {% endif%}
                 {% endfor %}
             </ul>
-        </div>
-        <div class="col col-lg-4 col-md-6 col-12">
-            <h1 class="text-center" id="user1">Alice</h1>
             <h2>Wallet</h2>
             <ul class="list-group list-group-striped">
                 <li class="list-group-item"><span>잔액:</span><span id="amount1"></span></li>
@@ -90,59 +96,111 @@ ul.list-group.list-group-striped li:nth-of-type(even){
                 </div>
                 <input type="hidden" name="from" value="alice">
                 <button type="submit" class="btn-block btn btn-primary">remit</button>
-                <h3 id="txmsg" style="color:red;"></h3>
-                <ul class="list-group" id="txpool">
-                </ul>
+
 
             </form>
         </div>
+
+        <div class="col col-lg-6 col-md-6 col-sm-12">
+            <h1 class="text-center" id="user2">Bob</h1>
+
+            <h2>Transaction : UTXO</h2>
+            <ul class="list-group list-inline">
+                {% for k , v in result.items() : %}
+                {% if k == 'bob':%}
+                {% for v0 in v : %}
+                <li class="list-group-item list-group-item-success">{{v0}}</li>
+                {% endfor %}
+                {% endif%}
+                {% endfor %}
+            </ul>
+            <h2>Wallet</h2>
+            <ul class="list-group list-group-striped">
+                <li class="list-group-item"><span>잔액:</span><span id="amount3"></span></li>
+            </ul>
+            <form action="/tx" method="GET">
+                <p>
+                <h2>Trasfer</h2>
+                <div class="form-group">
+                    <input type="inpupt" class="form-control" name="to" placeholder="받을 사람">
+                </div>
+                <div class="form-group">
+                    <input type="number" class="form-control" name="value" placeholder="금액">
+                </div>
+                <input type="hidden" name="from" value="bob">
+                <button type="submit" class="btn-block btn btn-primary">remit</button>
+                <h3 id="txmsg2" style="color:red;"></h3>
+                <ul class="list-group" id="txpool2">
+                </ul>
+            </form>
+        </div>
     </div>
-	</div>
 
-    <div class="col">
-        <div class="row">
-            <div class="col col-lg-8 col-md-6 col-sm-12">
-                <h2>Transaction : UTXO</h2>
-                <ul class="list-group list-inline">
-                    {% for k , v in result.items() : %}
-                    {% if k == 'bob':%}
-                    {% for v0 in v : %}
-                    <li class="list-group-item list-group-item-success">{{v0}}</li>
-                    {% endfor %}
-                    {% endif%}
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="col col-lg-4 col-md-6 col-12">
-                <h1 class="text-center" id="user2">Bob</h1>
-                <h2>Wallet</h2>
-                <ul class="list-group list-group-striped">
-                    <li class="list-group-item"><span>잔액:</span><span id="amount2"></span></li>
-                </ul>
-                <form action="/tx" method="GET">
-                    <p>
-                    <h2>Trasfer</h2>
-                    <div class="form-group">
+    <p/>
 
-                        <input type="inpupt" class="form-control" name="to" placeholder="받을 사람">
-                    </div>
-                    <div class="form-group">
-                        <input type="number" class="form-control" name="value" placeholder="금액">
-                    </div>
-                    <input type="hidden" name="from" value="alice">
-                    <button type="submit" class="btn-block btn btn-primary">remit</button>
-                    <h3 id="txmsg2" style="color:red;"></h3>
-                    <ul class="list-group" id="txpool2">
-                    </ul>
+    <div class="row">
+        <div class="col col-lg-6 col-md-6 col-sm-12">
+            <h1 class="text-center" id="user3">Charlie</h1>
 
-                </form>
-            </div>
+            <h2>Transaction : UTXO</h2>
+            <ul class="list-group">
+                {% for k , v in result.items() : %}
+                {% if k == 'charlie':%}
+                {% for v0 in v : %}
+                <li class="list-group-item list-group-item-success">{{v0}}</li>
+                {% endfor %}
+                {% endif%}
+                {% endfor %}
+            </ul>
+            <h2>Wallet</h2>
+            <ul class="list-group list-group-striped">
+                <li class="list-group-item"><span>잔액:</span><span id="amount2"></span></li>
+            </ul>
+            <form action="/tx" method="GET">
+                <p>
+                <h2>Trasfer</h2>
+                <div class="form-group">
+                    <input type="inpupt" class="form-control" name="to" placeholder="받을 사람">
+                </div>
+                <div class="form-group">
+                    <input type="number" class="form-control" name="value" placeholder="금액">
+                </div>
+                <input type="hidden" name="from" value="charlie">
+                <button type="submit" class="btn-block btn btn-primary">remit</button>
+            </form>
         </div>
+
+        <div class="col col-lg-6 col-md-6 col-sm-12">
+            <h1 class="text-center" id="user4">Dominic</h1>
+
+            <h2>Transaction : UTXO</h2>
+            <ul class="list-group list-inline">
+                {% for k , v in result.items() : %}
+                {% if k == 'dominic':%}
+                {% for v0 in v : %}
+                <li class="list-group-item list-group-item-success">{{v0}}</li>
+                {% endfor %}
+                {% endif%}
+                {% endfor %}
+            </ul>
+            <h2>Wallet</h2>
+            <ul class="list-group list-group-striped">
+                <li class="list-group-item"><span>잔액:</span><span id="amount4"></span></li>
+            </ul>
+            <form action="/tx" method="GET">
+                <p>
+                <h2>Trasfer</h2>
+                <div class="form-group">
+                    <input type="inpupt" class="form-control" name="to" placeholder="받을 사람">
+                </div>
+                <div class="form-group">
+                    <input type="number" class="form-control" name="value" placeholder="금액">
+                </div>
+                <input type="hidden" name="from" value="dominic">
+                <button type="submit" class="btn-block btn btn-primary">remit</button>
+            </form>
         </div>
-	</div>
-
-
+    </div>
 </div>
-
 </body>
 </html>

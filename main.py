@@ -14,7 +14,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index(arg = {}):
-    print('call Index')
+    print('call Index'),
     utxos = {}
     for name in names:
         utxos[name] = getUTXOs(name)
@@ -73,7 +73,9 @@ def get(arg={}):
     a = {}
     for name in names:
         a[name] = getUTXOs(name)
+    ## change redirect -> must check arg is valuable
     return index(arg)
+    # return redirect(url_for('index', values=arg))
 
 @app.route('/login')
 def login():
@@ -182,4 +184,4 @@ chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
 
 
 chrome = ChromeBrowser(chrome_path, url)
-app.run(host=url, port=80)
+app.run(host=url, port=8080)
