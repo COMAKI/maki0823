@@ -5,7 +5,7 @@ I would like to walk you through the project that we made.
 
 Purpose
 - This project is about blockchain and its core-logic such as transaction and mining process
-- Understand of how to blockchain run well by following its algorithm.
+- Understand of how to blockchain operates well by following its algorithm.
 - Reviewed blockchain concepts of byzantine fault tolerance, hash function, UTXO and merkle tree data structure.
 
 People 
