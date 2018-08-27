@@ -1,5 +1,31 @@
-This project is about basic blockchain and its core-logic such as transaction and minning process
 
-mini project of 4 contributors
+I am very happy to write readme paper on the behalf of my team Maki.
+I would like to walk you through the project that we made.
 
-August 2018, summer.
+Purpose
+- This project is about blockchain and its core-logic such as transaction and mining process
+- Understand of how to blockchain run well by following its algorithm.
+- Reviewed blockchain concepts of byzantine fault tolerance, hash function, UTXO and merkle tree data structure.
+
+People 
+- Mini project of 4 contributors
+- Github id: pseudotop, fkalar747, k2seok, Billy-Kimm
+
+Time
+- Roughly 3 days spent to complete.
+
+Technology & Skills
+- Python, Ajax, Java Script, Json, HTML5
+- Bitcoin library
+- Flask framework
+
+Logic
+- 4 players (Alice, Bob, Dominic, Chin) in screen.
+- Each participants able to make a transaction and check the UTXO and balance of personal wallet on a real time basis.
+
+UX/UI
+- This project is not quite related with UI/UX, however, we embodied basic UI and screen view
+
+
+August 2018, Summer.
+Written by Billy Kim.
