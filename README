@@ -22,7 +22,7 @@ Technology & Skills
 
 Logic
 - 4 players (Alice, Bob, Dominic, Chin) in screen.
-- Each participants able to make a transaction and check the UTXO and balance of personal wallet on a real time basis.
+- Each participants is able to make a transaction and check the UTXO and balance of personal wallet on a real time basis.
 
 UX/UI
 - This project is not quite related with UI/UX, however, we embodied basic UI and screen view
