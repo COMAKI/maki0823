@@ -18,7 +18,7 @@ def index(arg = {}):
     utxos = {}
     for name in names:
         utxos[name] = getUnspentUTXOs(name)
-    print(utxos)
+        print(utxos[name])
     return render_template('overview.html', result=utxos , arg = arg)
 
 @app.route('/transfer')
@@ -166,12 +166,13 @@ ismining = False
 def is_mining():
     global ismining
     if ismining:
-        return index()
+        return redirect('')
     else:
         ismining = True
         altCoin.add_block()
         ismining = False
-        return index()
+        ## recall 은 redirect로 호출 : @app.route('/')
+        return redirect('')
 
 url = 'localhost'
 # Windows
@@ -179,4 +180,4 @@ chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
 
 
 chrome = ChromeBrowser(chrome_path, url)
-app.run(host=url, port=80)
+app.run(host=url, port=8080)
