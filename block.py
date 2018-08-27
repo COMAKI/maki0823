@@ -18,16 +18,17 @@ class Block:
         self.transactions.append(transaction)
 
     def gen_mrkl_root(self):
-        tx_prev, tx_next = ''
-        mrkl_nodes = copy.deepcopy(self.transactions)
-        while len(mrkl_nodes) > 1:
-            mrkl_branch = []
-            if txi == 0 :
-                tx_prev = transaction.hash
-                continue
-            tx_next = transaction.hash
-            if txi%2 == 0 and txi != 0:
-                mrkl_branch.append(hashlib.sha256(str(tx_prev)+str(tx_next)).hexdigest())
+        pass
+        # tx_prev, tx_next = ''
+        # mrkl_nodes = copy.deepcopy(self.transactions)
+        # while len(mrkl_nodes) > 1:
+        #     mrkl_branch = []
+        #     if txi == 0 :
+        #         tx_prev = transaction.hash
+        #         continue
+        #     tx_next = transaction.hash
+        #     if txi%2 == 0 and txi != 0:
+        #         mrkl_branch.append(hashlib.sha256(str(tx_prev)+str(tx_next)).hexdigest())
 
 
     def gen_hash(self):

@@ -12,6 +12,15 @@ class TxIn():
     def __str__(self):
         return str(self.__dict__)
 
+    def get_prev_sign(self):
+        return hashlib.sha256(self.get_string(self.hash, self.n, self.address, self.value, self.pubk).encode()).hexdigest()
+
+    def get_string(self,*args):
+        if(len(args)<1): return
+        to_str = ''
+        for i in args:
+            to_str += str(i)
+        return to_str
     __repr__ = __str__
 
 class TxOut():
@@ -53,8 +62,9 @@ class Transaction():
 
     def is_valid(self,priv):
         for txin in self.inputs:
-            sign_of_msg = ecdsa_sign(str(txin), priv)
-            result = ecdsa_verify(str(txin), sign_of_msg, txin.pubk)
+            txin.sign = ecdsa_sign(str(txin.get_prev_sign()), priv)
+            result = ecdsa_verify(str(txin.get_prev_sign()), txin.sign, txin.pubk)
+            print('is_valid:',result)
             if result != True:
                 return result
         return True

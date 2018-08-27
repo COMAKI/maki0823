@@ -15,11 +15,11 @@
         var data = {{ result|tojson|safe }}
         console.log(data);
         let sum = 0;
-        for (var idx in data.length{
+        for (var idx in range(4){
             for (var i in data[0]){
                 sum += data[0][i].value;
-            };
-            console.log('#amount' + idx);
+            }
+            consol.log('#amount' + idx);
             $('#amount' + idx).html(sum);
         }
 
